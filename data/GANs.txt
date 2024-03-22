@@ -1,0 +1,1264 @@
+A review of Generative Adversarial Networks (GANs) and its applications in a
+wide variety of disciplines - From Medical to Remote Sensing
+ANKAN DASH, JUNYI YE, and GUILING WANG, Department of Computer Science, New Jersey Institute of
+Technology, USA
+We look into Generative Adversarial Network (GAN), its prevalent variants and applications in a number of sectors. GANs combine
+two neural networks that compete against one another using zero-sum game theory, allowing them to create much crisper and discrete
+outputs. GANs can be used to perform image processing, video generation and prediction, among other computer vision applications.
+GANs can also be utilised for a variety of science-related activities, including protein engineering, astronomical data processing,
+remote sensing image dehazing, and crystal structure synthesis. Other notable fields where GANs have made gains include finance,
+marketing, fashion design, sports, and music. Therefore in this article we provide a comprehensive overview of the applications of
+GANs in a wide variety of disciplines. We first cover the theory supporting GAN, GAN variants, and the metrics to evaluate GANs.
+Then we present how GAN and its variants can be applied in twelve domains, ranging from STEM fields, such as astronomy and
+biology, to business fields, such as marketing and finance, and to arts, such as music. As a result, researchers from other fields may
+grasp how GANs work and apply them to their own study. To the best of our knowledge, this article provides the most comprehensive
+survey of GAN’s applications in different field.
+CCS Concepts: • General and reference → Surveys and overviews; • Computing methodologies → Computer vision; Neural
+networks; • Theory of computation → Machine learning theory.
+Additional Key Words and Phrases: Deep learning, generative adversarial networks, computer vision, time series, applications
+ACM Reference Format:
+Ankan Dash, Junyi Ye, and Guiling Wang. 2021. A review of Generative Adversarial Networks (GANs) and its applications in a wide
+variety of disciplines - From Medical to Remote Sensing. 1, 1 (October 2021), 41 pages. https://doi.org/https://doi.org/
+1 INTRODUCTION
+Generative Adversarial Networks[ 48 ] or GANs belong to the family of Generative models[44 ]. Generative Models try
+to learn a probability density function from a training set and then generate new samples that are drawn from the same
+distribution. GANs generate new synthetic data that resembles real data by pitting two neural networks (the Generator
+and the Discriminator) against each other. The Generator tries to capture the true data distribution for generating new
+samples. The Discriminator, on the other hand, is usually a Binary classifier that tries to discern between actual and
+fake generated samples as precisely as possible.
+Over the last few years, GANs have made substantial progress. Due to hardware advances, we can now train deeper
+and more sophisticated Generator and Discriminator neural network architectures with increased model capacity.
+GANs have a number of distinct advantages over other types of generative models. Unlike Boltzmann machines[ 62 ],
+Authors’ address: Ankan Dash, ad892@njit.edu; Junyi Ye, jy394@njit.edu; Guiling Wang, guiling.wang@njit.edu, Department of Computer Science, New
+Jersey Institute of Technology, 323 Dr Martin Luther King Jr Blvd, Newark, NJ, USA, 07102.
+Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not
+made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components
+of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to
+redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org.
+© 2021 Association for Computing Machinery.
+Manuscript submitted to ACM
+Manuscript submitted to ACM 1
+arXiv:2110.01442v1 [cs.LG] 1 Oct 2021
+2 Ankan Dash, Junyi Ye, and Guiling Wang
+GANs do not require Monte Carlo approximations in order to train, and GANs use back-propagation and do not require
+Markov chains.
+GANs have gained a lot of traction in recent years and have been widely employed in a variety of disciplines,
+with the list of fields in which GANs can be used fast expanding. GANs can be used for data generation and
+augmentation([78 ],[134 ]), image to image translation([ 70],[ 197]), image super resolution([93 ],[73 ]) to name a few.
+It is this versatile nature, that has allowed GANs to be applied in completely non-aligned domains such as medicine and
+astronomy.
+There have been a few surveys and reviews about GANs due to their tremendous popularity and importance. However,
+the majority of past papers have concentrated on two distinct aspects: first, describing GANs and their growth over
+time, and second, discussing GANs’ use in image processing and computer vision applications([ 47 ],[3 ],[135],[ 51 ],[ 1]).
+As a consequence, the focus has been less on describing GAN applications in a wide range of disciplines. Therefore,
+we’ll present a comprehensive review of GANs in this first-of-its-kind article. We’ll look at GANs and some of the most
+widely used GAN models and variants, as well as a number of evaluation metrics, GAN applications in a variety of 12
+areas (including image and video related tasks, medical and healthcare, biology, astronomy, remote sensing, material
+science, finance, marketing, fashion, sports and music), GAN challenges and limitations, and GAN future directions.
+Some of the major contributions of the paper are highlighted below:
+• Describe the wide range of GAN applications in engineering, science, social science, business, art, music and
+sports. As far as we know, this is the first review paper to cover GAN applications in such diverse domains. This
+review will assist researchers of various backgrounds in comprehending the operation of GANs and discovering
+about their wide array of applications.
+• Evaluation of GANs include both qualitative and quantitative methods. This survey provides a comprehensive
+presentation of quantitative metrics that are used to evaluate the performance of GANs in both computer vision
+and time series data analysis. We include evaluation metrics for GANs’ application in time series data which are
+not discussed in other GAN survey paper. To the best of our knowledge, this is the first survey paper to present
+time series data evaluation metrics for GANs.
+We have organized the rest of the article as follows: Section 2 presents the basic working of GANs, and the most
+commonly used GAN variants and their descriptions. Section 3 summarises some of the frequently used GAN evaluation
+metrics. Section 4 describes the extensive range of applications of GANs in a wide variety of domains. We also provide a
+table at the end of each subsection summarizing the application area and the corresponding GAN models used. Section 5
+discusses some of the difficulties and challenges that are encountered during the training of GANs. Apart from this, we
+present a short summary concerning the future direction of GAN development. Section 6 provides concluding remarks.
+2 GAN, GAN VARIANTS AND EXTENSIONS
+In this section, we describe GANs, the most common GAN models and extensions. Following a description of GAN
+theory, we go over twelve GAN variants that serve as foundations or building blocks for many other GAN models.
+There are a lot of articles on GANs, and a lot of them have named-GANs, which are models that have a specific name
+that usually contains the word “GAN”. We’ve focused on twelve specific GAN variants. The reader will obtain a better
+knowledge of the core aspects of GANs by reading through these twelve GAN variants, which will help them navigate
+other GAN models.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 3
+2.1 GAN basics
+Generative Adversarial Networks were developed by Ian Goodfellow et al.[ 48] in the year 2014. GANs belong to the
+class of Generative models[ 44 ]. GANs are based on the min-max, zero-sum game theory. For this, GANs consist of
+two neural networks: one is the Generator and the other is the Discriminator. The goal of the Generator is to learn to
+generate fake sample distribution to deceive the Discriminator whereas the goal of the Discriminator is to learn to
+distinguish between real and fake distribution generated by the Generator.
+2.1.1 Network architecture and learning. The general architecture of GAN which is comprised of the Generator and the
+Discriminator is shown in Figure 1. The Generator (G) takes in as input some random noise vector Z and then tries to
+generate an image using this noise vector indicated as G(z). The generated image is then passed to the Discriminator
+and based on the output of the Discriminator the parameters of the Generator are updated. The Discriminator (D) is
+a binary classifier which simultaneously takes a look at both real and fake samples generated by the Generator and
+tries to decide which ones are real and which ones are fake. Given a sample image X, the Discriminator models the
+probability of the image being fake or real. The probabilities are then passed back to the Generator as feedback.
+Over time each of the Generator and the Discriminator model tries to one up each other by competing against each
+other this is where the term “adversarial” of Generative Adversarial Networks comes from, and the optimization is
+based on the minimax game problem. During training both the Generator’s and Discriminator’s parameters are updated
+using back propagation with the ultimate goal of the Generator is to be able to generate realistic looking images and
+the Discriminator to get progressively better at detecting generated fake images from real ones.
+Fig. 1. Basic GAN architecture
+GANs use the Minimax loss function which was introduced by Goodfellow et al. when they introduced GANs for the
+first time. The Generator tries to minimize the following function while the Discriminator tries to maximize it. The
+Minimax loss is given as,
+𝑀𝑖𝑛𝐺 𝑀𝑎𝑥𝐷 𝑓 (𝐷, 𝐺) = E𝑥 [𝑙𝑜𝑔(𝐷 (𝑥))] + E𝑧 [𝑙𝑜𝑔(1 − 𝐷 (𝐺 (𝑧)))]. (1)
+Manuscript submitted to ACM
+4 Ankan Dash, Junyi Ye, and Guiling Wang
+Here, 𝐸𝑥 is the expected value over all real data samples, 𝐷 (𝑥) is the probability estimate of the Discriminator if 𝑥 is
+real, 𝐺 (𝑧) is the output of the Generator for a given random noise vector 𝑧 as input, 𝐷 (𝐺 (𝑧)) is the Discriminator’s
+probability estimate if the fake generated sample is real, 𝐸𝑧 is the expected value over all random inputs to the Generator.
+2.2 Conditional Generative Adversarial Nets (cGAN)
+Conditional Generative Adversarial Nets[118] or cGANs are an extension of GANs for conditional sample generation.
+This gives control over the modes of data being generated. cGANs use some extra information 𝑦, such as class labels or
+other modalities, to perform conditioning by concatenating this extra information 𝑦 with the input and feeding it into
+both the Generator G and the Discriminator D. The Minimax objective function can be modified as shown below,
+𝑀𝑖𝑛𝐺 𝑀𝑎𝑥𝐷 𝑓 (𝐷, 𝐺) = E𝑥 [𝑙𝑜𝑔(𝐷 (𝑥 |𝑦))] + E𝑧 [𝑙𝑜𝑔(1 − 𝐷 (𝐺 (𝑧|𝑦)))] (2)
+Fig. 2. cGAN architecture[118]
+2.3 Wasserstein GAN (WGAN)
+The authors of WGAN[ 7] introduced a new algorithm which gave an alternative to traditional GAN training. They
+showed that their new algorithm improved the stability of model learning and prevent problems such as mode collapse.
+For the critique model, WGAN uses weight clipping, which ensures that weight values (model parameters) stay within
+pre-defined ranges. The authors found that Jensen-Shannon divergence is not ideal for measuring the distance of
+the distribution of the disjoint parts. Therefore they used the Wasserstein distance which uses the concept of Earth
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 5
+mover’s(EM) distance instead to measure the distance between the generated and the real data distribution and while
+training the model tries to maintain One-Lipschitz continuity[53].
+The EM or Wasserstein distance for the real data distribution 𝑃𝑟 and the generated data distribution 𝑃𝑔 is given as
+𝑊 (𝑃𝑟 , 𝑃𝑔) = 𝑖𝑛𝑓𝛾𝜀Π (𝑃𝑟 ,𝑃𝑔 ) E(𝑥,𝑦)∼𝑟 [∥𝑥 − 𝑦 ∥] (3)
+where Π(𝑃𝑟 , 𝑃𝑔) denotes the set of all joint distributions 𝛾 (𝑥, 𝑦) whose marginals are respectively 𝑃𝑟 and 𝑃𝑔. However,
+the equation for the Wasserstein distance is highly intractable. Therefore the authors used the Kantorovich-Rubinstein
+duality to approximate the Wasserstein distance as
+𝑚𝑎𝑥𝑤𝜀𝜔 E𝑥∼𝑃𝑟 [𝑓𝑤 (𝑥)] − E𝑧∼𝑝 (𝑧) [𝑓𝑤 (𝐺 (𝑧))] (4)
+where (𝑓𝑤 )𝑤𝜀𝜔 represents a parameterized family of functions that are all K-Lipschitz for some K. The Discriminator
+D’s goal is to optimize this parameterized function which represents the approximated Wasserstein distance. The goal
+of the Generator G is to miminize the above Wasserstein distance equation such that the generated data distribution is
+as close as possible to the real distribution. The overall WGAN objective function is given as
+𝑚𝑖𝑛𝐺𝑚𝑎𝑥𝑤𝜀𝜔 E𝑥∼𝑃𝑟 [𝑓𝑤 (𝑥)] − E𝑧∼𝑝 (𝑧) [𝑓𝑤 (𝐺 (𝑧))] (5)
+or
+𝑚𝑖𝑛𝐺𝑚𝑎𝑥𝐷 E𝑥∼𝑃𝑟 [𝑓𝑤 (𝑥)] − E𝑧∼𝑝 (𝑧) [𝑓𝑤 (𝐺 (𝑧))] (6)
+Even though WGAN improved training stability and alleviated problems such as mode collapse however enforcing the
+Lipschitz constraint is a challenging task. WGAN-GP[ 53] proposes an alternative to clipping weights by using gradient
+penalty to penalize the norm of gradient of the critic with respect to its input.
+2.4 Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks
+(DCGANs)
+Radford et al.[134] introduced the deep convolutional generative adversarial networks or DCGANs. As the name
+suggests DCGANs use deep convolutional neural networks for both the Generator and Discriminator models. The
+original GAN architecture used only multi-layer perceptrons or MLPs but since CNNs are better at images than MLP,
+the authors of DCGAN used CNN in the Generator G and Discriminator D neural network architecture. Three key
+features of the DCGANs neural network architecture are listed as follows
+• First, for the Generator shown in Figure 3, convolutions are replaced with transposed convolutions, so the
+representation at each layer of the Generator is successively larger, as it maps from a low-dimensional latent
+vector onto a high-dimensional image. Replacing any pooling layers with strided convolutions (Discriminator)
+and fractional-strided convolutions (Generator).
+• Second, use batch normalization in both the Generator and the Discriminator.
+• Third, use ReLU activation in Generator for all layers except for the output, which uses Tanh. Use LeakyReLU
+activation in the Discriminator for all layers.
+• Fourth, use the Adam optimizer instead of SGD with momentum.
+All of the above modifications rendered DCGAN to achieve stable training. DCGAN was important because the authors
+demonstrated that by enforcing certain constraints we can develop complex high quality Generators. The authors also
+made several other modifications to the vanilla GAN architecture.
+Manuscript submitted to ACM
+6 Ankan Dash, Junyi Ye, and Guiling Wang
+Fig. 3. DCGAN Generator architecture[134]
+2.5 Progressive Growing of GANs for Improved Quality, Stability, and Variation (ProGAN)
+Karras et al.[78 ] introduced a new training methodology for training GANs to generate high resolution images. The
+idea behind ProGAN is to be able to synthesize high resolution and high quality images via the incremental (gradual)
+growing of the Discriminator and the Generator networks during the training process. ProGAN makes it easier for the
+Generator to generate higher resolution images by gradually training it from lower resolution images to those higher
+resolution images (see Figure 4.). That is in a progressive GAN, the Generator’s first layers produce very low-resolution
+images, and subsequent layers add details. Training is considerably stabilised by the progressive learning process.
+Fig. 4. ProGAN architecture[78]
+2.6 Interpretable Representation Learning by Information Maximizing Generative Adversarial Nets
+(InfoGAN)
+The key motivation behind InfoGAN[19 ] is to enable GANs to learn disentangled representations and have control over
+the properties or features of the generated images in an unsupervised manner. To do this instead of using just a noize
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 7
+vector 𝑧 as input the authors decompose the noise vector into two parts first being the traditional noise vector 𝑧 and
+second as new “latent code vector” 𝑐. This code has a predictable effect on the output images. The objective function for
+InfoGAN[19] is given as,
+𝑀𝑖𝑛𝐺 𝑀𝑎𝑥𝐷 𝑓1 (𝐷, 𝐺) = 𝑓 (𝐷, 𝐺) − 𝜆𝐼 (𝑐; 𝐺 (𝑧, 𝑐)) (7)
+where 𝜆 is the regularization parameter, 𝐼 (𝑐; 𝐺 (𝑧, 𝑐)) is the mutual information between the latent code 𝑐 and the
+Generator output 𝐺 (𝑧, 𝑐). The idea is to maximize the mutual information between the latent code and the Generator
+output. This encourages the latent code 𝑐 to contain as much as possible, important and relevant features of the real
+data distributions. However it is not practical to calculate the mutual information 𝐼 (𝑐; 𝐺 (𝑧, 𝑐)) explicitly as it requires
+the posterior 𝑃 (𝑐 |𝑥), therefore a lower bound for 𝐼 (𝑐; 𝐺 (𝑧, 𝑐)) is approximated. This can be achieved by defining an
+auxiliary distribution 𝑄 (𝑐 |𝑥) to approximate 𝑃 (𝑐 |𝑥). Thus the final form of the objective function is then given by this
+lower-bound approximation to the Mutual Information:
+𝑀𝑖𝑛𝐺 𝑀𝑎𝑥𝐷 𝑓1 (𝐷, 𝐺) = 𝑓 (𝐷, 𝐺) − 𝜆𝐿1 (𝑐; 𝑄) (8)
+where 𝐿1 (𝑐; 𝑄) is the lower bound for 𝐼 (𝑐; 𝐺 (𝑧, 𝑐)). If we compare the above equation to the original GAN objective
+function we realize that this framework is implemented by merely adding a regularization term to the original GAN’s
+objective function.
+2.7 StackGAN: Text to Photo-realistic Image Synthesis with Stacked Generative Adversarial Networks
+(StackGAN)
+StackGAN[189] shown in Figure 5, takes in as input a text description and then synthesizes high quality images using
+the given text description. The authors proposed StackGAN to generate 256×256 photo-realistic images based on text
+descriptions. To generate photo-realistic images StackGAN uses a sketch-refinement process, StackGAN decomposes
+the difficult problem into more manageable sub-problems by using Stacked Generative Adversarial Networks. The
+Stage-I GAN creates Stage-I low-resolution images by sketching the object’s primitive shape and colours based on the
+given text description. The Stage-II GAN generates high-resolution images with photo-realistic details using Stage-I
+results and text descriptions as inputs.
+To be able to do this, StackGAN architecture consists of the following components: (a) Input variable length text
+description is converted into a fixed length vector embedding. (b) Conditioning Augmentation. (c) Stage I Generator:
+Generates (128x128) images (d) Stage I Discriminator (e) Stage II Generator: Generates (256x256) images. (f) Stage II
+Discriminator
+The variable length text description is first converted to a vector embedding which is non-linearly transformed to
+generate conditioning latent variables as the input of the Generator. Filling the latent space of the embedding with
+randomly generated fillers is a trick used in the paper to make the data manifold more continuous and thus more
+conducive to later training. They also add the Kullback-Leibler divergence of the input Gaussian distribution and the
+Gaussian distribution as a regularisation term to the Generator’s training output, to make the data manifold more
+continuous and training-friendly.
+The Stage I GAN uses the following objective function:
+L𝐷0 = E(𝐼0,𝑡 )∼𝑝data [log 𝐷0 (𝐼0, 𝜙𝑡 )] + E𝑧∼𝑝𝑧 ,𝑡 ∼𝑝data [log (1 − 𝐷0 (𝐺0 (𝑧, ˆ𝑐0) , 𝜙𝑡 ))] (9)
+Manuscript submitted to ACM
+8 Ankan Dash, Junyi Ye, and Guiling Wang
+L𝐺0 = E𝑧∼𝑝𝑧 ,𝑡 ∼𝑝data [log (1 − 𝐷0 (𝐺9 (𝑧, ˆ𝑐0) , 𝜙𝑡 ))] + 𝜆𝐷𝐾𝐿 (N (𝜇0 (𝜙𝑡 ) , Σ0 (𝜙𝑡 )) ∥N (0, 𝐼 )) (10)
+The Stage II GAN uses the following objective function:
+L𝐷 = E(𝐼,𝑡 )∼𝑝data [log 𝐷 (𝐼, 𝜙𝑡 )] + E𝑠0∼𝑝𝐺0 ,𝑡 ∼𝑝data [log (1 − 𝐷 (𝐺 (𝑠0, ˆ𝑐) , 𝜙𝑡 ))] (11)
+L𝐺 = E𝑠0∼𝑝𝐺0 ,𝑡 ∼𝑝data [log (1 − 𝐷 (𝐺 (𝑠0, ˆ𝑐) , 𝜙𝑡 ))] + 𝜆𝐷𝐾𝐿 (N (𝜇 (𝜙𝑡 ) , Σ (𝜙𝑡 )) ∥N (0, 𝐼 )) (12)
+where 𝜙𝑡 is the text embedding of the given description, 𝑝𝑧 is Gaussian distribution, ˆ𝑐0 is sampled from a Gaussian
+distribution from which 𝜙𝑡 is drawn. 𝑠0 = 𝐺0 (𝑧, ˆ𝑐0) and 𝜆 = 1.
+Fig. 5. StackGAN architecture[189]
+2.8 Image-to-Image Translation with Conditional Adversarial Networks (pix2pix)
+pix2pix[ 70 ] is a conditional generative adversarial network(cGAN[118]) for solving general purpose image-to-image
+translation problems. The GAN consists of a Generator which has a U-Net [ 137] architecture and the Discriminator
+is a PatchGAN [70 ] classifier. The pix2pix model not only learns the mapping from input to output image, but also
+constructs a loss function to train this mapping. Interestingly, unlike regular GANs, there is no random noise vector
+input to the pix2pix Generator. Instead, the Generator learns a mapping from the input image 𝑥 to the output image
+𝐺 (𝑥). The objective or the loss function for the Discriminator is the traditional adversarial loss function. The Generator
+on the other hand is trained using the adversarial loss along with the 𝐿1 or pixel distance loss between the generated
+image and the real or target image. The 𝐿1 loss encourages the generated image for a particular input to remain as
+similar as possible to the corresponding output real or ground truth image. This leads to faster convergence and more
+stable training. The loss function for conditional GAN is given by
+L𝑐𝐺𝐴𝑁 (𝐺, 𝐷) =E𝑥,𝑦 [log 𝐷 (𝑥, 𝑦)]+ E𝑥,𝑧 [log(1 − 𝐷 (𝑥, 𝐺 (𝑥, 𝑧))] (13)
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 9
+The 𝐿1 or pixel distance loss is given by
+L𝐿1 (𝐺) = E𝑥,𝑦,𝑧 [∥𝑦 − 𝐺 (𝑥, 𝑧)∥1] (14)
+The final loss function is given by
+arg min
+𝐺 max
+𝐷 L𝑐𝐺𝐴𝑁 (𝐺, 𝐷) + 𝜆L𝐿1 (𝐺) (15)
+where 𝜆 is the weighting hyper-parameter coefficient. Pix2PixHD[170] is an improved version of the Pix2Pix algorithm.
+The primary goal of Pix2PixHD is to produce high-resolution images and perform semantic manipulation. To do this
+the authors introduced multi-scale Generators and Discriminators and combined the cGANs and feature matching loss
+function. The training set consists of pairs of corresponding images (𝑠𝑖 , 𝑥𝑖 , where 𝑠𝑖 is a semantic label map and 𝑥𝑖 is a
+corresponding natural image. The cGAN loss function is given by,
+E(s,x) [log 𝐷 (s, x)] + Es [log(1 − 𝐷 (s, 𝐺 (s))] (16)
+The ith-layer feature extractor of Discriminator 𝐷𝑘 as 𝐷𝑘 (𝑖) (from input to the 𝑖th layer of 𝐷𝑘 ). The feature matching
+loss L𝐹 𝑀 (𝐺, 𝐷𝑘 ) is given by
+LFM (𝐺, 𝐷𝑘 ) = E(s,x)
+𝑇∑︁
+𝑖=1
+1
+𝑁𝑖
+[
+𝐷 (𝑖)
+𝑘 (s, x) − 𝐷 (𝑖)
+𝑘 (s, 𝐺 (s)) 1
+]
+(17)
+where 𝑇 is the total number of layers and 𝑁𝑖 denotes the number of elements in each layer. The objective function of
+pix2pixHD is given by
+min
+𝐺
+©
+«
+©
+«
+max
+𝐷1,𝐷2,𝐷3
+∑︁ 𝑘=1,2,3
+LGAN (𝐺, 𝐷𝑘 )ª
+®
+¬
++ 𝜆
+∑︁
+𝑘=1,2,3
+LFM (𝐺, 𝐷𝑘 )ª
+®
+¬
+(18)
+Fig. 6. Using pix2pix to map edges to color images[ 70]. D, the Discriminator, learns to distinguish between fake (Generator-generated)
+and actual (edge, photo) tuples. G, the Generator, learns how to deceive the Discriminator. In contrast to an unconditional GAN, the
+Generator and Discriminator both look at the input edge map.
+2.9 Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks(CycleGAN)
+One fatal flaw of pix2pix is that it requires paired images for training and thus cannot be used for unpaired data which
+do not have input and output pairs. CycleGAN[197 ] addresses the issue by introducing a cycle consistency loss that
+tries to preserve the original image after a cycle of translation and reverse translation. Matching pairs of images are no
+longer required for training in this formulation. CycleGAN uses two Generators and two Discriminators. The Generator
+G is used to convert images from the X to the Y domain. The Generator F, on the other hand, converts images from Y to
+X. (𝐺 : 𝑋 → 𝑌 , 𝐹 : 𝑌 → 𝑋 ). The Discriminator 𝐷𝑌 distinguishes 𝑦 from 𝐺 (𝑥) and the Discriminator 𝐷𝑋 distinguishes 𝑥
+Manuscript submitted to ACM
+10 Ankan Dash, Junyi Ye, and Guiling Wang
+from 𝐹 (𝑦). The adversarial loss is applied to both the mapping functions. For the mapping function 𝐺 : 𝑋 → 𝑌 and its
+Discriminator 𝐷𝑌 , the objective function is given by
+LGAN (𝐺, 𝐷𝑌 , 𝑋, 𝑌 ) = E𝑦∼𝑝data (𝑦) [log 𝐷𝑌 (𝑦)]
++ E𝑥∼𝑝data (𝑥) [log (1 − 𝐷𝑌 (𝐺 (𝑥))] (19)
+The authors argued that the adversarial losses alone cannot guarantee that the learned function can map an individual
+input 𝑥𝑖 to a desired output 𝑦𝑖 as it leaves the model under-constrained. The authors therefore used the cycle consistency
+loss such that the learned mapping is cycle-consistent. It is based on the assumption that if you convert an image from
+one domain to the other and back again by feeding it through both Generators in sequence, you should get something
+similar to what you put in. Forward cycle consistency is represented as 𝑥 → 𝐺 (𝑥) → 𝐹 (𝐺 (𝑥)) ≈ 𝑥 and the backward
+cycle consistency as 𝑦 → 𝐹 (𝑦) → 𝐺 (𝐹 (𝑦)) ≈ 𝑦. The cycle consistency loss is given by
+Lcyc (𝐺, 𝐹 ) = E𝑥∼𝑝data (𝑥) [∥𝐹 (𝐺 (𝑥)) − 𝑥 ∥1]
++ E𝑦∼𝑝data (𝑦) [∥𝐺 (𝐹 (𝑦)) − 𝑦 ∥1] (20)
+The final full objective is given by
+L (𝐺, 𝐹, 𝐷𝑋 , 𝐷𝑌 ) = LGAN (𝐺, 𝐷𝑌 , 𝑋, 𝑌 )
++ LGAN (𝐹, 𝐷𝑋 , 𝑌, 𝑋 )
++ 𝜆Lcyc (𝐺, 𝐹 ),
+(21)
+where 𝜆 controls the relative importance of the two objectives.
+𝐺∗, 𝐹 ∗ = arg min
+𝐺,𝐹 max
+𝐷𝑥 ,𝐷𝑌
+L (𝐺, 𝐹, 𝐷𝑋 , 𝐷𝑌 ) (22)
+Fig. 7. CycleGAN [197] (a) two Generator mapping functions 𝐺 : 𝑋 → 𝑌 and 𝐹 : 𝑌 → 𝑋 , and two Discriminators 𝐷𝑌 and 𝐷𝑋 . (b)
+forward cycle-consistency loss: 𝑥 → 𝐺 (𝑥) → 𝐹 (𝐺 (𝑥)) ≈ 𝑥 and (c) backward cycle consistency loss: 𝑦 → 𝐹 (𝑦) → 𝐺 (𝐹 (𝑦)) ≈ 𝑦.
+2.10 A Style-Based Generator Architecture for Generative Adversarial Networks(StyleGAN)
+The primary goal of StyleGAN[80] is to produce high quality, high resolution facial images that are diverse in nature and
+provide control over the style of generated synthetic images. StyleGAN is an extension of the ProGAN[78] model which
+uses the progressive growing approach for synthesizing high resolution and high quality images via the incremental
+(gradual) growing of the Discriminator and the Generator networks during the training process. It’s important to note
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 11
+that StyleGAN changes affect only the Generator network, which means they only affect the generative process. The
+Discriminator and loss function, which are both the same as in a traditional GAN, have not been altered. The upgraded
+Generator includes several additions to the ProGAN’s Generators which is shown in Figure 8. and are described below:
+• Baseline Progressive GAN: The authors use the Progressive GAN(ProGAN[78]) as their baseline from which
+they inherit the network architecture and some of the hyperparameters.
+• Bi-linear up/down sampling: The ProGAN model used the nearest neighbor up/down sampling but the authors
+of StyleGAN used bi-linear sampling layers for both the Generator and the Discriminator.
+• Mapping Network, Style Network and AdaIN: Instead of feeding in the noise vector 𝑧 directly into the
+Generator, it goes through a mapping network to get an intermediate noise vector 𝑤, say. The output of the
+mapping network (𝑤) is then passed through a learned affine transformation (A) before passing into the synthesis
+network through the Adaptive Instance Normalization[ 68 ] or AdaIN module. In Figure “A” stands for a learned
+affine transform. The AdaIN module transfers the encoded information, created by the Mapping Network after
+the affine transformation, which is incorporated into each block of the Generator model after the convolutional
+layers. The AdaIN module begins by converting the output of the feature map to a standard Gaussian and then
+adding the style vector as a bias term. The mapping network 𝑓 is a standard deep neural network which is
+comprised of 8 fully connected layers and the synthesis network 𝑔 consists of 18 layers.
+• Remove traditional input: Most models, including ProGAN, utilize random input to generate the Generator’s
+initial image. However, the StyleGAN authors found that the image features are controlled by 𝑤 and the AdaIN.
+As a result, they simplify the architecture by eliminating the traditional input layer and begin image synthesis
+with a learned constant tensor.
+• Add noise inputs: Before evaluating the nonlinearity, Gaussian noise is added after each convolution. In Figure
+7. “B” is the learned scaling factor applied per channel to the noise input.
+• Mixing regularization: The authors also introduced a novel regularization method to reduce neighbouring
+styles correlation and have more fine grained control over the generated images. Instead of passing just one
+latent vector, 𝑧, through the mapping network as input and getting one vector, 𝑤, as output, mixing regularisation
+passes two latent vectors, 𝑧1 and 𝑧2, through the mapping vector and gets two vectors, 𝑤1 and 𝑤2. The use of 𝑤1
+and 𝑤2 is completely randomized for every iteration this technique prevents the network from assuming that
+styles adjacent to each other correlate.
+2.11 Recurrent GAN (RGAN) and Recurrent Conditional GAN (RCGAN)
+Besides generating synthetic images, GAN can also generate sequential data[ 38, 119]. Instead of modeling the data
+distribution in the original feature space, the generative model for time-series data also captures the conditional
+distribution 𝑃 (𝑋𝑡 |𝑋1:𝑡 −1) given historical data. The main difference in architecture between Recurrent GAN and the
+traditional GAN is that we replace the DNNs/ CNNs with Recurrent Neural Networks (RNNs) in both Generator and
+Discriminator. Here, the RNNs can be any variants of RNN, such as Long short-term memory (LSTM) and Gated
+Recurrent Unit (GRU), which captures the temporal dependency in input data. In the case of Recurrent Conditional GAN
+(RCGAN), both Generator and Discriminator are conditioned on some auxiliary information. Many experiments[38 ]
+show that RGAN and RCGAN are able to effectively generate realistic time-series synthetic data.
+In Figure 9, we illustrate the architecture of RGAN and RCGAN. The Generator RNN takes the random noise at
+each time step to generate the synthetic sequence. Then, the Discriminator RNN works as a classifier to distinguish
+Manuscript submitted to ACM
+12 Ankan Dash, Junyi Ye, and Guiling Wang
+Fig. 8. StyleGAN Generator [80]
+whether the input is real or fake. Condition inputs are concatenated to the sequential inputs of both the Generator and
+Discriminator if it is an RCGAN. Similar to GAN, the Discriminator in RGAN minimize the cross-entropy loss between
+the generated data and the real data. The Discriminator loss is formulated as follows.
+𝐷𝑙𝑜𝑠𝑠 (𝑋𝑛, 𝑦𝑛 ) = −𝐶𝐸 (𝑅𝑁 𝑁 𝐷 (𝑋𝑛 ), 𝑦𝑛 ) (23)
+Where 𝑋𝑛 (𝑋𝑛 ∈ R𝑇 ×𝑑 ) and 𝑦𝑛 (𝑦𝑛 ∈ {1, 0}𝑇 ) are the input and output of the Discriminator with sequence length 𝑇
+and feature size 𝑑. 𝑦𝑛 is a vector of 1s for real sequence and 0s for synthetic sequence. 𝐶𝐸 (·) is the average cross-entropy
+function and 𝑅𝑁 𝑁 𝐷 (·) is the RNN in Discriminator. The Generator loss is formulated below.
+𝐺𝑙𝑜𝑠𝑠 (𝑍𝑛 ) = 𝐷𝑙𝑜𝑠𝑠 (𝑅𝑁 𝑁𝐺 (𝑍𝑛 ), 1) = −𝐶𝐸 (𝑅𝑁 𝑁 𝐷 (𝑅𝑁 𝑁𝐺 (𝑍𝑛 )), 1) (24)
+Here, 𝑍𝑛 is a random noise vector with 𝑍𝑛 ∈ R𝑇 ×𝑚 . In the case of RCGAN, the inputs of both Generator and
+Discriminator also concatenate the conditional information 𝑐𝑛 at each time step.
+Fig. 9. RGAN and RCGAN [38]
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 13
+2.12 Time-series GAN (TimeGAN)
+Recently, a novel GAN framework preserving temporal dynamics called Time-Series GAN (TimeGAN) [ 183] is proposed.
+Besides minimizing the unsupervised adversarial loss in the traditional GAN learning procedure, (1) TimeGAN introduces
+a stepwise supervised loss using the original inputs as supervision, which explicitly encourages the model to capture the
+stepwise conditional distributions in the data. (2) TimeGAN introduces an autoencoder network to learn the mapping
+from feature space and embedding/latent space, which reduces the dimensionality of the adversarial learning space. (3)
+To minimize the supervised loss, jointly training on both the autoencoder and Generator is deployed, which forces the
+model to be conditioned on the embedding to learn temporal relationship. TimeGAN framework not only captures the
+distributions of features in each time step but also capture the complex temporal dynamics of features across time.
+The TimeGAN consists of four important parts, embedding function, recovery function, Generator and Discriminator
+in Figure 10. First, the autoencoder (first two parts) learns the latent representation from the inputs sequence. Then, the
+adversarial model (latter two parts) trains jointly on the latent space to generate the synthetic sequence with temporal
+dynamics by minimizing both the unsupervised loss and supervised loss.
+Fig. 10. (a) Block Diagram of Four Key Components in TimeGAN. (b) Training scheme: solid lines and dashed lines represent forward
+propagation paths and backpropagation paths respectively.[183]
+Table 1. Application of common GAN models
+Common GAN variants and extensions Application area
+DCGAN[134] Image Generation
+cGAN[118] Semi supervised conditional Image Generation
+InfoGAN[19] Unsupervised learning of interpretable and disentangled repre-
+sentations
+StackGAN[189] Image generation based on text inputs
+Pix2Pix[70] Image to image translation
+CycleGAN[197] Unpaired Image to image translation
+StyleGAN[80] High resolution facial image generation that are diverse in nature
+RGAN, RCGAN[38] Synthetic medical time series data generation
+TimeGAN[183] Realistic time-series data generation
+Manuscript submitted to ACM
+14 Ankan Dash, Junyi Ye, and Guiling Wang
+3 GAN EVALUATION METRICS
+One of the most difficult aspects of GAN training is assessing their performance, or determining how well a model
+approximates a data distribution. In terms of theory and applications, significant progress has been made, with a large
+number of GAN variants now available. However there has been relatively little effort put into evaluating GANs, and
+there are still gaps in quantitative assessment methods. In this section, we present the relevant and popular metrics
+which are used to evaluate the performance of GANs.
+(1) Inception Score (IS): IS was proposed by Salimans et al.[ 141] and it employs the pre-trained InceptionNet[154]
+trained on ImageNet[29 ] to capture the desired properties of generated samples. The average Kullback–Leibler or
+KL divergence[ 76 ] between the conditional label distribution 𝑝 (𝑦 | x) of samples and the marginal distribution
+𝑝 (𝑦) calculated from all samples is measured by IS. The goal of IS is to assess two characteristics for a set of
+generated images: image quality (which evaluates whether images have meaningful objects in them) and image
+diversity. Thus IS favors a low entropy of 𝑝 (𝑦 | x) but a high entropy of 𝑝 (𝑦). IS can be expressed as:
+exp (Ex [KL(𝑝 (y | x)∥𝑝 (y))]) (25)
+A higher IS indicates that the generative model is capable of producing high-quality samples that are also diverse.
+(2) Modified Inception Score (m-IS): In its original form, Inception Score assigns models that produce a low
+entropy class conditional distribution 𝑝 (𝑦 | x) with a higher score overall generated data. It is, however, desirable
+to have diversity within a category of samples. To characterize this diversity, Gurumurthy et al.[ 55 ] proposed a
+modified version of inception-score which incorporates a cross-entropy style score −𝑝 (𝑦 | x𝑖 ) log (𝑝 (𝑦 | x𝑗
+) )
+where 𝑥 𝑗 𝑠 are samples of the same class as 𝑥𝑖 as per the outputs of the trained inception model. The modified IS
+can be defined as,
+exp
+(
+Ex𝑖
+[Ex𝑗
+[(KL (𝑃 (𝑦 | x𝑖 ) ∥𝑃 (𝑦 | x𝑗
+))] ] )
+(26)
+The m-IS is calculated per-class and then averaged across all classes. m-IS can be thought of as a proxy for
+assessing both intra-class sample diversity and sample quality.
+(3) Mode Score(MS): The MODE score introduced by Che et al.[ 16 ] is an improved version of the IS that addresses
+one of the IS’s major flaws: it ignores the prior distribution of ground truth labels. In contrast to IS, MS can
+measure the difference between the real and generated distributions.
+exp
+(
+Ex
+[
+KL
+(
+𝑝 (𝑦 | x)∥𝑝
+(
+𝑦train ))]
+− KL
+(
+𝑝 (𝑦)∥𝑝
+(
+𝑦train )))
+(27)
+where 𝑝
+(
+ytrain )
+is the empirical distribution of labels computed from training data. According to the author’s
+evaluation, the MODE score successfully measures two important aspects of generative models, namely variety
+and visual quality.
+(4) Frechet Inception Distance (FID): Proposed by Heusel et al.[61 ], the Frechet Inception Distance score de-
+termines how far feature vectors calculated for real and generated images differ. A specific layer of the
+InceptionNet[154] model is used by the FID score to capture and embed features of an input image. The
+embeddings are summarized as a multivariate Gaussian by calculating the mean and covariance for both the
+generated data and the real data. The Fréchet distance (or Wasserstein-2 distance) between these two Gaussians
+is then used to quantify the quality of the generated samples.
+𝐹 𝐼𝐷 (𝑟, 𝑔) = 𝜇𝑟 − 𝜇𝑔 2
+2 + Tr
+(
+Σ𝑟 + Σ𝑔 − 2 (Σ𝑟 Σ𝑔
+) 1
+2
+)
+(28)
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 15
+where (𝜇𝑔, Σ𝑔
+) and (𝜇𝑟 , Σ𝑟 ) represent the empirical mean and empirical covariance of the generated and real
+data disctibutions respectively. Smaller distances between synthetic(model generated) and real data distributions
+are indicated by a lower FID.
+(5) Image Quality Measures: Below we describe some commonly used image quality assessment measures used
+to compare GAN generated data with the real data.
+(a) Structural similarity index measure (SSIM)[ 173] is a method for quantifying the similarity between two images.
+SSIM tries to model the perceived change in the image’s structural information. The SSIM value varies between
+-1 and 1, where a value of 1 shows perfect similarity. Multi-Scale SSIM or MS-SSIM[ 174] is a multiscale version
+of SSIM that allows for more flexibility in incorporating image resolution and viewing conditions than a single
+scale approach. MS-SSIM ranges between 0 (low similarity) and 1 (high similarity).
+(b) Peak Signal-to-Noise Ratio or PSNR compares the quality of a generated image to its corresponding real
+image by measuring the peak signal-to-noise ratio of two monochromatic images. For example evaluation of
+conditional GANs or cGANs[118] Higher PSNR (in db) indicates better quality of the generated image.
+(c) Sharpness Difference (SD) represents the difference in clarity between the generated and the real image. The
+larger the value is, the smaller the difference in sharpness between the images is and the closer the generated
+image is to the real image.
+(6) Evaluation Metrics for Time-Series/Sequence Inputs: To evaluate quality of generating synthetic sequence
+data is very challenging. For example, the Intensive Care Unit (ICU) signal looks completely random to a non-
+medical export[ 38]. The researchers evaluate the quality of synthetic sequential data mainly focusing on the
+following three different aspects. (1) Diversity – the synthetic data should be generated from the same distribution
+of real data. (2) Fidelity – the synthetic data should be indistinguishable from the real data. (3) Usability — the
+synthetic data should be good enough to be used as the train/test dataset.[183]
+(a) t-SNE and PCA [ 183] are both commonly used visualization tools for analyzing both the original and synthetic
+sequence datasets. They flatten the dataset across the temporal dimension so that the dataset can be plotted in
+the 2D plane. They measure how closely the distribution of generated samples resembles that of the original
+in 2-dimensional space.
+(b) Discriminative Score [ 183 ] evaluates how difficult for a binary classifier to distinguish between the real
+(original) dataset and the fake (generated) dataset. It is challenging for the classifier to classify if the synthetic
+data and the original are drawn from the same distribution.
+(c) Maximum Mean Discrepancy (MMD) [ 38 , 49] learns the distribution of the real data. The maximum mean
+discrepancy method has been proposed to distinguish whether the synthetic data and the real data are from
+the same distribution by computing the squared difference of the statistics between real and synthetic samples
+(𝑀𝑀𝐷2). The unbiased 𝑀𝑀𝐷2 can be denoted as following where the inner production between functions is
+replaced with a kernel function 𝐾.
+𝑀𝑀𝐷2 = 1
+𝑛(𝑛 − 1)
+𝑛∑︁
+𝑖=1
+𝑛∑︁
+𝑗≠𝑖
+𝐾 (𝑥𝑖 , 𝑥 𝑗 ) − 2
+𝑚𝑛
+𝑛∑︁
+𝑖=1
+𝑚∑︁
+𝑗=1
+𝐾 (𝑥𝑖 , 𝑦𝑗 ) + 1
+𝑚(𝑚 − 1)
+𝑚∑︁
+𝑖=1
+𝑚∑︁
+𝑗≠𝑖
+𝐾 (𝑦𝑖 , 𝑦𝑗 ) (29)
+A suitable kernel function for the time-series data is vital. The authors treat the time series as vectors for compar-
+ison and select the radial basis function (RBF) as the kernel function which is 𝐾 (𝑥, 𝑦) = 𝑒𝑥𝑝 (− ∥𝑥 − 𝑦 ∥2 /(2𝜎2)).
+To select an appropriate kernel bandwidth 𝜎, the estimator of the t-statistic of the power of the MMD test
+Manuscript submitted to ACM
+16 Ankan Dash, Junyi Ye, and Guiling Wang
+between two distributions ̂ 𝑡 = 𝑀𝑀𝐷2
+√̂
+𝑉
+is maximised. The authors split a validation set during training to tune
+the parameter. The result shows that 𝑀𝑀𝐷2 is more informative than either Generator or Discriminator loss,
+and correlates well with quality as assessed by visualising[38].
+(d) Earth Mover Distance (EMD) [163, 176] is a measure of the distance between two probability distributions
+over a region. It describes how much probability mass has to be moved to transform 𝑃ℎ into 𝑃𝑔 where 𝑃ℎ
+denotes the historical distribution and 𝑃𝑔 is the generated distribution. The EMD is defined by
+𝐸𝑀𝐷 (𝑃ℎ, 𝑃𝑔) = 𝑖𝑛𝑓
+𝜋 ∈Î (𝑃ℎ,𝑃𝑔 )
+𝐸(𝑋 ,𝑌 ) 𝜋 [∥𝑋 − 𝑌 ∥] (30)
+where Î (𝑃ℎ, 𝑃𝑔) denotes the set of all joint probability distributions with marginals 𝑃ℎ and 𝑃𝑔.
+(e) AutoCorrelation Function (ACF) Score [176] describes the coefficient of correlation between historical and the
+generated time series. Let 𝑟1:𝑇 denote the historical log percentage change series and {𝑟 (1)
+1: ̃𝑇 ,𝜃 , ..., 𝑟 (𝑀)
+1: ̃𝑇 ,𝜃 } a set of
+generated log percentage change paths of length  ̃𝑇 ∈ 𝑁 . The autocorrelation is calculated with the time lag
+𝑡𝑎𝑢 and the series 𝑟1:𝑇 and measures the correlation of the lagged time series with the series itself
+𝐶 (𝜏; 𝑟 ) = 𝐶𝑜𝑟𝑟 (𝑟𝑡 +𝜏 , 𝑟𝑡 ) (31)
+The ACF(𝑓 ) score is computed for a function 𝑓 : 𝑅 → 𝑅 as
+𝐴𝐶𝐹 (𝑓 ) :=∥ 𝐶 (𝑓 (𝑟1:𝑇 )) − 1
+𝑀
+𝑀∑︁
+𝑖=1
+𝐶 (𝑓 (𝑟 (𝑖)
+1:𝑇 ,𝜃 )) ∥2 (32)
+where 𝐶 : 𝑅𝑇 → [−1, 1]𝑆 : 𝑟1:𝑇 ↦ → (𝐶 (1; 𝑟 ), ..., 𝐶 (𝑆; 𝑟 )).
+(f) Leverage Effect Score [176] provides a comparison of the historical and the generated time dependence. The
+leverage effect for lag 𝜏 is measured using the correlation of the lagged, squared log percentage changes and
+the log percentage changes themselves.
+ℓ (𝜏; 𝑟 ) = 𝐶𝑜𝑟𝑟 (𝑟 2
+𝑡 +𝜏 , 𝑟𝑡 ) (33)
+The leverage effect score is defined by
+∥ 𝐿(𝑟1:𝑇 = 1
+𝑀
+𝑀∑︁
+𝑖=1
+𝐿(𝑟 (𝑖)
+1: ̃𝑇 ,𝜃 )) ∥2 (34)
+where 𝐿 : 𝑅𝑇 → [−1, 1]𝑆 : 𝑟1;𝑟 ↦ → (ℓ (1; 𝑟 ), ..., ℓ (𝑆; 𝑟 )).
+4 GAN APPLICATIONS
+GANs are by far the most widely used generative models and they are immensely powerful for the generation of realistic
+synthetic data samples. In this section, we will go over the wide array of domains in which Generative Adversarial
+Networks (GANs) are being applied. Specifically, we will present the use of GANs in Image processing, Video generation
+and prediction, Medical and Healthcare, Biology, Astronomy, Remote Sensing, Material Science, Finance, Fashion
+Design, Sports and Music.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 17
+Table 2. Summary of relevant and popular GAN evaluation metrics
+Quantitative metrics Description
+Inception Score (IS) [141] Measures the KL-Divergence between the conditional and
+marginal label distributions over the data.
+Modified Inception Score (m-IS) [55] Incorporates a cross-entropy style score to promote diversity
+within a category of samples.
+Mode Score (MS) [16] Improved veersion of IS and takes into account the prior
+distribution of ground truth labels.
+Fréchet Inception Distance (FID) [61] Evaluates the Fréchet distance or the Wasserstein-2 distance
+between the multi-variate Gaussians fitted to data embedded
+into a feature space.
+Structural Similarity Index Measure (SSIM[ 173]), Peak
+signal-to-noise ratio (PSNR), Multiscale SSIM (MS-
+SSIM[174]) and Sharpness Difference (SD)
+Evaluate and assess the quality of generated images.
+Maximum Mean Discrepancy (MMD[49 , 119]), Earth
+Mover Distance (EMD [ 163, 176]), DY Metric[ 176],
+ACF Score[176], Leverage Effect Score[176]
+Evaluate the quality of generated sequence data.
+4.1 Image processing
+GANs are quite prolific when it comes to specific image processing related tasks like image super-resolution, image
+editing, high resolution face generation, facial attribute manipulation to name a few.
+• Image super-resolution: Image super-resolution refers to the process of transforming low resolution images
+to high resolution images. SRGAN[93 ] is the first image super-resolution framework capable of inferring photo-
+realistic natural images for 4x up-scaling factors. Several other super resolution frameworks([73], [ 172]) have
+also been developed to produce better results. Best-Buddy GANs[101] developed recently is used for single image
+super-resolution (SISR) task along with previous works([198], [168]).
+• Image editing: Image editing involves removing or modifying some aspects of an image. For example, images
+captured during bad weather or heavy rain lack visual quality and thus will require manual intervention to either
+remove anomalies such as raindrops or dust particles that reduce image quality. The authors of ID-CGAN[ 187]
+used GANs to address the problem of single image de-raining. Image modification could involve modifying or
+changing some aspects of an image such as changing the hair color, adding a smile, etc. which was demonstrated
+by ([131], [199]).
+• High resolution face image generation: High resolution facial image generation is one other area of image
+processing where GANs have excelled. Face generation and attribute manipulation using GANs can be broadly
+classified into the creation of entire synthetic faces, face features or attribute manipulation and face component
+transformation.
+– Synthetic face generation: Synthetic face generation refers to the creation of synthetic images of the face of
+people who do not exist in real life. ProGAN[ 78 ], described in the previous section demonstrated the generation
+of realistic looking images of human faces. Since then there have been several works which use GANs for facial
+image generation([191], [192]). StyleGAN[79 ] which is a unique generative adversarial network introduced by
+Nvidia researchers in December 2018. The primary goal of StyleGAN is to generate high quality face images
+that are also diverse in nature. To achieve this, the authors used techniques such as using a noise mapping
+Manuscript submitted to ACM
+18 Ankan Dash, Junyi Ye, and Guiling Wang
+network, adaptive instance normalization and progressive growing similar to ProGAN to produce very high
+resolution images.
+– Face features or attribute manipulation: Face attribute manipulation includes facial pose and expression
+transformation. The authors of PosIX-GAN[ 12 ] trained their model to generate high quality face images with
+9 different pose variations when given a face image in any arbitrary pose as input. DECGAN[17 ] authors
+used Double Encoder Conditional GAN to perform facial expression synthesis. Expression Conditional GAN
+(ECGAN)[156] can learn the mapping from one image domain to another and the authors were able to control
+specific facial expressions by the conditional attribute label.
+– Face component transformation: Face component transformation deals with altering the face style(hair
+color and style) or adding accessories such as eye glasses. The authors of DiscoGAN[ 86] were able to change hair
+color and the authors of StarGAN[ 22] were able to perform multi-domain image translations. BeautyGAN[ 100]
+can be used to translate the makeup style from a given reference makeup face image to another non-makeup
+one while preserving face identity. The authors of InfoGAN[ 19 ] trained their model to learn disentangled
+representations in an unsupervised manner and can modify facial components such as adding or removing
+eyeglasses and changing hairstyles. GANs can also be applied to image inpainting where the task is of
+reconstructing missing regions in an image. In this regard GANs have been used([ 182], [184]) to perform the
+task.
+Table 3. Applications in Image processing
+Image processing application GAN models
+Image super-resolution SRGAN [ 93 ], TSRGAN [ 73 ], ESRGAN [172], Best-
+BuddyGAN [101], GMGAN [198], PESR [168]
+Image editing and modifying ID-CGAN [187], IcGAN [131]
+Synthetic face generation ProGAN [78], StyleGAN [80]
+Face features or attribute manipulation PosIX-GAN [12], DECGAN [17], ECGAN [156]
+Face component transformation DiscoGAN [86 ], StarGAN [22 ], BeautyGAN [100], In-
+foGAN [19]
+4.2 Video generation and prediction
+Synthesizing videos using GANs can be divided into three main categories. (a) Unconditional video generation (b)
+Conditional video generation (c) Video prediction
+4.2.1 Unconditional video generation. For unconditional video generation the output of the GAN models is not
+conditioned on any input signals. Due to the lack of any information provided as a condition with the videos during the
+training phase, the output videos produced by these frameworks typically are low-quality in nature.
+The authors of VGAN[165] were the first to apply GANs for video generation. Their Generator consists of two
+CNN networks, one 3D spatio-temporal convolutional network to capture moving objects in the foreground, and the
+other is a 2D spatial convolutional model that captures the static background. The two independent outputs from
+the Generator are combined to create the generated video and fed to the Discriminator, to decide if it is real or fake.
+Temporal Generative Adversarial Nets (TGAN)[ 140] can learn representation from an unlabeled video dataset and
+generate a new video. TGAN Generator consists of two sub Generators one of which is the temporal Generator and
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 19
+the other is the image Generator. The temporal Generator takes a single latent variable as input and produces a set
+of latent variables, each of which corresponds to a video frame. The image Generator creates a video from a set of
+latent variables. The Discriminator consists of three-dimensional convolutional layers. TGAN uses WGAN to provide
+stable training and meets the K-Lipschitz constraint. FTGAN[125] consists of two GANs: FlowGAN and TextureGAN.
+FlowGAN network deals with motion, i.e. adds optical flow for representing the object motion more effectively. The
+TextureGAN model is used to generate the texture that is conditioned on the previous FlowGAN result, to produce the
+required frames. Motion and Content decomposed Generative Adversarial Network or MoCoGAN[ 160] uses a motion
+and content decomposed representation for video generation. MoCoGAN is made up of four sub-networks: a recurrent
+neural network, an image Generator, an image Discriminator, a video Discriminator, and a video Discriminator. Built on
+the BigGAN[14] architecture, the Dual Video Discriminator GAN (DVD-GAN)[ 24 ] is a generative video model for high
+quality frame generation. DVD-GAN employs Recurrent Neural Network (RNN) units as well as a dual Discriminator
+architecture to deal with the spatial and temporal dimension.
+4.2.2 Conditional video generation. In conditional video generation the output of the GAN models is conditioned
+on input signals such as text, audio or speech. We do not consider other conditioning techniques such as images to
+video, semantic map to videos and video to video as these can be considered to fall under the video prediction category
+which is described in section 4.5.2 below.
+For text to video synthesis the goal is to generate videos based on some conditional text. Li et al.[ 103] used
+Variational Autoencoder (VAE)[ 88 ] and Generative Adversarial Network (GAN) for generating videos from text. Their
+model is made a conditional gist Generator (conditional VAE), a video Generator, and a video Discriminator. The initial
+image/gist is created by the conditional gist Generator, which is conditioned on encoded text. This gist serves as a
+general representation of the image, background color and object layout of the desired video. The video’s content and
+motion are then generated using cGAN by conditioning both the gist and the text input. Temporal GANs conditioning on
+captions (TGANs-C)[ 140] uses a Bidirectional LSTM and LSTM based encoder to embed and obtain the representation
+of the input text. This output representation is then concatenated with a random noise vector and then given to
+the Generator, which is a 3D deconvolution network to generate synthesize realistic videos. The model has three
+Discriminators: The video Discriminator distinguishes real video from synthetic video and aligns video with the correct
+caption, the frame Discriminator determines whether each frame is real/fake and semantically matched/mismatched
+with the given caption, and the motion Discriminator exploits temporal coherence between consecutive frames. Balaji
+et al. proposed the Text-Filter conditioning Generative Adversarial Network (TFGAN)[9]. TFGAN introduces a novel
+multi-scale text-conditioning technique in which text features are extracted from the encoded text and used to create
+convolution filters. Then, the convolution filters are input to the Discriminator network to learn good video-text
+associations in the GAN model. StoryGAN[102] is based on a sequential conditional GAN framework whose task is to
+generates a sequence of images for each sentence in a given multi-sentence paragraph. The GAN model consists of
+(𝑖) Story Encoder, (𝑖𝑖) A recurrent neural network (RNN) based Context Encoder, (𝑖𝑖𝑖) An image Generator and (𝑖𝑣)
+An image Discriminator and a story Discriminator. BoGAN[18 ] maintains semantic matching between video and the
+corresponding language description at various levels and ensures coherence between consecutive frames. The authors
+used LSTM and 3D convolution based encoder decoder architecture to produce frames from embedding based on the
+input text. Region level semantic alignment module was proposed to encourage the Generator to take advantage of
+the semantic alignment between video and words on a local level. To maintain frame-level and video level coherence
+two Discriminators were used. Kim et al.[ 82] came up with Text-to-Image-to-Video Generative Adversarial Network
+Manuscript submitted to ACM
+20 Ankan Dash, Junyi Ye, and Guiling Wang
+(TiVGAN) for text-based video generation. The key idea is to begin by learning text-to-single-image generation, then
+gradually increase the number of images produced, and repeat until the desired video length is reached.
+Speech to video synthesis involves the task of generating synchronized video frames conditioned on an au-
+dio/speech input. Jalalifar et al.[71 ] used LSTM and CGAN for speech conditioned talking face generation. LSTM
+network learns to extract and predict facial landmark positions from audio features. Given the extracted set of landmarks,
+the cGAN then generates synchronized facial images with accurate lip sync. Vougioukas et al.[ 167] used GANs for
+generating videos of a talking head. The generation of video frames is conditioned on a still image of a person and an
+audio clip containing speech and does not rely on extracting intermediate features. Their GAN architecture uses an RNN
+based Generator, frame level and sequence level Discriminator respectively. The idea of disentangled representation
+was explored by Zhou et al.[195]. The authors proposed the Disentangled Audio-Visual System (DAVS), which uses
+disentangled audio-visual representation to create high-quality talking face videos.
+4.2.3 Video prediction. Video prediction is the ability to predict future video frames based on the context of a sequence
+of previous frames. Formally future frame prediction can be defined as follows. Let X𝑖 ∈ R𝑤×ℎ×𝑐 be the 𝑖𝑡ℎ frame in the
+sequence of 𝑛 video frames X = (𝑋𝑖−𝑛, . . . , 𝑋𝑖−1, 𝑋𝑖 ), where 𝑤, ℎ, and 𝑐 denote the width, height and the number of
+channels respectively. The goal is to predict the next sequence of frames Y =
+( ˆ𝑌𝑖+1, ˆ𝑌𝑖+2, . . . , ˆ𝑌𝑖+𝑚
+)
+using the input X.
+Video prediction is a challenging task due to the complex task of modelling both the content and motion in
+videos. To this extent several studies have been carried out to perform video prediction using GAN-based training
+([ 114],[164 ],[2],[ 66 ],[104],[ 166],[108]). Mathieu et al.[ 114] used multi-scale architecture for future frame prediction. The
+network was trained using an adversarial training method, and an image gradient difference loss function. MCNet[164]
+performs the task of video frame prediction by disentangling temporal and spatial dynamics in videos. An Encoder-
+Decoder Convolutional Neural Network is used to model video content and Convolutional-LSTM is used to model
+temporal dynamics or motion in the video. In this way predicting the next frame is as simple as converting the extracted
+content features into the next frame content using the recognized motion features.
+FutureGAN[ 2] used an encoder-decoder based GAN model to predict future frames of the video sequence. Their
+network comprises of Spatio-temporal 3D convolution network(3D ConvNets)[159 ] for all encoder and decoder modules
+to capture both the spatial and temporal components of a video sequence. To have stable training and prevent problems
+of mode collapse the authors used Wasserstein GAN with gradient penalty (WGAN-GP)[52 ] loss and the technique of
+progressively growing GAN or ProGAN[78 ] which has been shown to generate high resolution images. VPGAN[ 66] is
+a GAN-based framework for stochastic video prediction. The authors introduce a new adversarial inference model,
+an action control conformal mapping network and use cycle consistency loss for their model. The authors also
+combined image segmentation models with their GAN framework for robust and accurate frame prediction. Their
+model outperformed other existing stochastic video prediction methods. With a unified architecture, Dual Motion
+GAN[104] attempts to jointly resolve the future-frame and future-flow prediction problems. The proposed framework
+takes in as input a sequence of frames to predict the next frame by combining the future frame prediction with the
+future flow-based prediction. To achieve this, Dual Motion GAN employs a probabilistic motion encoder (to map frames
+to latent space), two Generators (a future-frame Generator and a future-flow Generator), as well as a flow estimator and
+flow-warping layer. A frame Discriminator and a flow Discriminator are used to classifying fake and real future frames
+and flow. Bhattacharjee et al.[ 13] tackle the problem of future frames prediction by using multi-stage GANs. To capture
+the temporal dimension and handle inter-frame relationships, the authors proposed two new objective functions, the
+Normalized Cross-Correlation Loss (NCCL) and the Pairwise Contrastive Divergence Loss (PCDL). The multistage
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 21
+GAN(MS-GAN) is made up of 2 GANs to generate frames at two separate resolution whereby Stage-1 GAN output is
+fed to Stage-2 GAN to produce the final output. Kwon et al.[ 91] proposed a novel framework based on CycleGAN[ 197 ]
+called the Retrospective CycleGAN to predict future frames that are farther in time but are relatively sharper than
+frames generated by other methods. The framework consists of a single Generator and two Discriminators. During
+training, the Generator is tasked with generating both future and past frames, and the retrospective cycle constraints are
+used to ensure bi-directional prediction consistency. The frame Discriminator detects individual fake frames, whereas
+the sequence Discriminator determines whether or not a sequence contains fake frames. According to the authors, the
+sequence Discriminator plays a crucial role in predicting temporally consistent future frames. To train their model, the
+combination of two adversarial and two reconstruction loss functions were used.
+Table 4. Applications in Video generation and prediction
+Video generation and prediction GAN models
+Unconditional video generation VGAN [ 165], TGAN [140], FTGAN [125], MoCoGAN
+[160], DVD-GAN [24]
+Conditional video generation VAE-GAN [103], TGANs-C [ 140], TFGAN [ 9 ], Sto-
+ryGAN [ 102], BoGAN[18 ], TiVGAN[82 ], LSTM and
+cGAN[71 ], RNN based GAN[ 167], TemporalGAN[195]
+Video Prediction Multi-Scale GAN[114], MCNet[ 164], FutureGAN[ 2],
+VPGAN[66 ], Dual Motion GAN[ 104], MSGAN[ 13 ],
+Retrospective Cycle GAN[91]
+4.3 Medical and Healthcare
+GANs have immense medical image generation applications and can be used to improve early diagnosis, reduce time and
+expenditure. Because medical image data is generally limited, GANs can be employed as data augmentation techniques
+by conducting image-to-image translation, synthetic data synthesis, and medical image super-resolution.
+One major application of GANs in medical and healthcare is the image-to-image translation framework, that is
+when multi-modal images are required one can use images from one modality or domain to generate images in another
+domain. Magnetic resonance imaging (MRI), is considered the gold standard in medical imaging. Unfortunately, it
+is not a viable option for patients with metal implants, as the metal in the machine could interfere with the results
+and the patients’ safety. MR-GAN[74 ] is similar to CycleGAN[197] and is used to transform 2D brain CT image slices
+into 2D brain MR image slices. However, unlike CycleGAN, which is used for unpaired image-to-image translation,
+MR-GAN is trained using both paired and unpaired data and combines adversarial loss, dual cycle-consistent loss,
+and voxel-wise loss. MCML-GANs[ 185] uses the approach of multiple-channels-multiple-landmarks (MCML) input
+to synthesize color Retinal fundus images from a combination of vessel tree, optic disc, and optic cup images. The
+authors used two models based on the pix2pix[70] and CycleGAN[ 197] model framework and proposed several different
+architectures for the Generator model and compared their performance. Zhao et al.[ 193 ] also proposed Tub-GAN
+and Tub-sGAN image-to-image translation framework to generate retinal and neuronal images. Armanious et al.[8]
+proposed the MedGAN framework for generalizing image to image translation in the field of medical image generation
+by combining the adversarial framework with a new combination of non-adversarial losses along with the usage of
+CasNet a ResNets[58 ] inspired architecture. Sandfort et al.[142] used CycleGAN[197] to transform contrast CT images
+Manuscript submitted to ACM
+22 Ankan Dash, Junyi Ye, and Guiling Wang
+into noncontrast images. The authors compared the segmentation performance of a U-Net trained on the original
+dataset versus a U-Net trained on a combined dataset of original data and synthetic non-contrast images were compared.
+DermGAN[45 ] is used to generate synthetic images with skin conditions. The model learns to convert a semantic map
+containing a pre-specified skin condition, its size and location, as well as the underlying skin colour, into a realistic image
+that retains the pre-specified traits. The DermGAN Generator uses a modified U-Net[ 137] where the deconvolution
+layers are replaced with a nearest-neighbor resizing layer followed by a convolution layer to reduce the checkerboard
+effect. The Generator and Discriminator are trained to minimize the combination of feature matching loss, min-max
+GAN loss, 𝑙1 reconstruction loss for the whole image, 𝑙1 reconstruction loss for the pathological region.
+Apart from solving the image to image translation problems GAN are widely used for synthetic medical image
+generation([ 116],[ 23],[ 25],[190]). Costa et al.[ 25 ] implemented an adversarial autoencoder for the task of conditional
+retinal vessel network synthesis. Beers et al.[10 ] applied ProGAN to generate high resolution and high quality 512x512
+retinal fundus images and 256x256 multimodal glioma images. Zhang et al.[190] used DCGAN[ 134], WGAN[ 7] and
+boundary equilibrium GANs (BEGANs)[11] to generate synthetic medical images. They used the generated synthetic
+images to augment their datasets to build models with higher tissue recognition accuracy. Overall training with
+augmented datasets saw an increase in tissue recognition accuracy for the three GAN models when compared to
+baseline models trained without data augmentation. fNIRS-GANs[122] based on WGAN[7] is used to perform functional
+near-infrared spectroscopy (fNIRS) data augmentation to improve the fNIRS-brain– computer interface (BCI) accuracy.
+Using data augmentation the authors were able to achieve higher classification accuracy of 0.733 and 0.746 for both the
+SVM and neural network models respectively as compared to 0.4 for both the models trained without data augmentation.
+To prevent data leakage by generating anonymized synthetic electrocardiograms (ECGs), Piacentino et al.[132] used
+GANs. The authors first propose a new general procedure to convert raw data into images, which are well suited for
+GANs. Following that, a GAN design was established, trained, and evaluated. Because of its simplicity, the authors
+chose to use Auxiliary Classifier Generative Adversarial Network(ACGAN)[124] for their intended task. Kwon et al.[90 ]
+used GANs to augment mRNA samples to improve classification accuracy of deep learning models for cancer detection.
+With 5 fold increase in training data by combining GAN generated synthetic samples with the original dataset, the
+authors were able to improve the F1 score by 39%.
+Image reconstruction and super resolution are vital to obtaining high resolution images for diagnosis as due to
+constraints such as the amount of radiation used for MRI and other image acquisition techniques can highly impact
+the quality of images obtained. Multi-level densely connected super-resolution network, mDCSRN-GAN[20] proposed
+by Chen et al. uses an efficient 3D neural network design for the Generator architecture to perform image super
+resolution. MedSRGAN[50 ] is an image super resolution (SR) framework for medical images. The authors used a novel
+convolutional neural network, Residual Whole Map Attention Network (RWMAN) as the Generator network to low
+resolution features and then performs upsampling. For the Discriminator instead of having just the single generated high
+resolution image the authors used pairs of input low resolution images and generated high resolution images. Yamashita
+et. al[ 179] evaluated several super resolution GAN models(SRCNN[32 ], VDSR[ 83 ], DRCN[ 84 ] and ESRGAN[172]) for
+Optical Coherence Tomography (OCT)[40 ] image enhancement. The authors found ESRGAN has the worst performance
+in terms of PSRN and SSIM but qualitatively, it was the best one producing sharper and high contrast images.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 23
+Table 5. Applications in Medical and Healthcare
+Medical and Healthcare application GAN models
+Multimodal Image to image translation pix2pix[70 ], CycleGAN[ 197], MR-GAN[74 ],MCML-
+GANs[185], Tub-GAN and Tub-sGAN[ 193], MedGAN
+[8], DermGAN[45]
+Image generation for data augmentation WGAN[7], WGAN-GP[ 53 ], DCGAN [134],
+BEGAN[11 ], ProGAN [78 ], fNIRS-GANs[ 122],
+ACGAN[124]
+Image reconstruction SRCNN[ 32], VDSR[83 ], DRCN[84 ], ESRGAN[ 172]
+mDCSRN-GAN [20],MedSRGAN [50]
+4.4 Biology
+Biology is an area where generative models especially GANs can have a great impact by performing tasks such as
+protein sequence design, data augmentation and imputation and biological image generation. Apart from this GANs
+can also be applied for binding affinity prediction.
+Protein engineering the process of identifying or developing useful or valuable proteins sequences with certain
+optimized properties. Several works have been done in relation to the application of Deep Generative models for
+protein sequence, especially the use of GANs(Repecka et al.[ 136], Amimeur et al.[4] and Gupta et al.[54] ). GANs
+can be used to generate novel valid functional protein sequences and optimize protein sequences to have certain
+specific properties. ProteinGAN[ 136] can learn to generate diverse functional protein sequences directly from complex
+multidimensional amino acids sequence space. The authors specifically used GANs to generate functional malate
+dehydrogenases. Amimeur et al.[4] developed the Antibody-GAN which uses a modified WGAN for the generation of
+both single-chain and paired-chain antibody sequence generation. Their model is capable of generating extremely large
+diverse libraries of novel libraries that mimic somatically hypermutated human repertoire response. The authors also
+demonstrated the use of transfer learning to use their GAN model to generate molecules with specific properties of
+interest like MHC class II binding and specific complementarity-determining region (CDR) characteristics. FBGAN[ 54]
+uses the WGAN architecture along with the analyzer in a feedback-loop mechanism to optimize the synthetic gene
+sequences for desired properties using an external function analyser. The analyzer is a differential neural network and
+assigns a score to sampled sequences from the Generator. As training progresses lowest scoring generated sequences
+are replaced by high scoring generated sequences for the entire Discriminator’s training set. GANs were utilised by
+Anand at al.[5] to generate protein structures, with the goal of using them in quick de novo protein design.
+GANs have been used for data augmentation and data imputation in biology due to the lack of available
+biosamples or the cost of collecting such samples. Some recent works include the generation and analysis of single-cell
+RNA-seq([ 42], [113]). The authors of cscGAN[ 113 ] or conditional single-cell generative adversarial neural networks
+used GANs for the generation of realistic single-cell RNA-seq data. Wang et al.[ 171] proposed GGAN, a GAN framework
+to impute the expression values of the unmeasured genes. To do this they used a conditional GAN to leverage the
+correlations between the set of landmark and target genes in expression data. The Generator takes the landmark gene
+expression as input and outputs the target gene expression. This approach leverages correlations between the set of
+landmark and target genes in expression data from projects like 1000 Genomes. Park et al.[130] applied GANs to predict
+the molecular progress of Alzheimer’s disease (AD) by successfully analyzing RNA-seq data from a 5xFAD mouse model
+of AD. Specifically, the authors successfully applied WGAN+GP[ 52 ] to bulk RNA-seq data with fewer variations in gene
+Manuscript submitted to ACM
+24 Ankan Dash, Junyi Ye, and Guiling Wang
+expression levels and a smaller number of genes. scIGAN[178] is a GAN-based framework for scRNA-seq imputation.
+scIGANs can use complex, multi-cell type samples to learn non-linear gene-gene correlations and train a generative
+model to generate realistic expression profiles of defined cell types.
+GANs can also be used to generate biological imaging data. CytoGAN[ 46 ] or Generative Modeling of Cell Images,
+the authors evaluated the use of several GAN models such as DCGAN[134], LSGAN[111] and WGAN[ 7] for cell
+microscopy imaging, in particular morphological profiling. Through their experiments, they discovered that LSGAN
+was the most stable, resulting in higher-quality images than both DCGAN and WGAN. GANs have also been used for
+the generation of realistic looking electron microscope images (Han et al.[ 56]) and the generation of cells imaged by
+fluorescence microscopy(Oskin et al.[127]).
+Predicting binding affinities is an important task in drug discovery though it still remains a challenge. To aid in drug
+discovery by predicting binding affinity between drug and target Zhao et l.[194] devised the use of a semi-supervised
+GANs-based method. The researchers utilised two GANs to learn representations from raw protein and drug sequence
+data, and a convolutional regression network to predict affinity.
+Table 6. Applications in Biology
+Applications in Biology GAN models
+Protein Engineering ProteinGAN [ 136], Antibody-GAN [ 4], FBGAN [ 54 ],
+DCGANs [5]
+Data augmentation and data imputation cscGAN [113],GGAN [171], scIGAN [178]
+GANs for Biological Image Synthesis CytoGAN [ 46], SGAN [56], DCGAN+Wasserstein loss
+[127]
+Binding affinity prediction GANsDTA [194]
+4.5 Astronomy
+With the advent of Big-data, the amount of data publicly available to scientists for data-driven analysis is mind boggling.
+Every day terabytes of data are being generated by hundreds if not thousands of satellites across the globe. With
+powerful computing resources GANs have found their way into astronomy as well for tasks such as image translation,
+data augmentation and spectral denoising.
+The authors of RadioGAN[43] based their GAN on the Pix2Pix model to perform image to image translation
+between two different radio survey datasets to recover extended flux densities. Their model recovers extended flux
+density for nearly half of the sources within a 20% margin of error and learns more complex relationships between
+sources in the two surveys than simply convolving them with a different synthesised beam. Several other authors have
+also used image to image translation models such as Pix2Pix, Pix2PixHD to generate solar images(Dash et al., Park et
+al.[129], Kim et al.[87], Jeong et al.[72], Shin et al.[144] etc.).
+Apart from image-to-image related tasks, GANs have been extensively used to generate synthetic data in the
+astronomy domain. Smith et al.[149] proposed SGAN to produce realistic synthetic eXtreme Deep Field(XDF) images
+similar to the ones taken by the Hubble Space Telescope. Their SGAN model has a similar architecture to DCGAN
+and can be used to generate synthetic images in astrophysics and other domain. Ullmo et al.[161] used GANs to
+generate cosmological images to bypass simulations which generally require lots of computing resources and are quite
+expensive. Dia et al.[31] showed that GANs can replace expensive model-driven approaches to generate astronomical
+images. In particular, they used ProGANs along with Wasserstein cost function to generate realistic images of galaxies.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 25
+ExoGAN[200] which is based on the DCGAN framework[134] is the first deep-learning approach for solving the inverse
+retrieval of exoplanetary atmospheres. According to the authors, ExoGAN was found to be up to 300 times faster than
+a standard retrieval for large spectral ranges. ExoGAN is designed to work with a wide range of instruments and
+wavelength ranges without requiring any additional training. Fussell et al.[41] explored the use of DCGAN[ 134] and
+StackGAN[189] in a chained fashion for generation of high-resolution synthetic galaxies images.
+The authors of Spectra-GAN[177 ] designed their algorithm for spectral denoising. Their algorithm is based on
+CycleGAN i.e. it has two Generators and two Discriminators, with the exception that instead of unpaired samples
+SpectraGAN used paired examples. The model comprises of three loss functions: adversarial loss, cycle-consistent loss,
+and generation-consistent loss.
+Table 7. Applications in Astronomy
+Applications in Astronomy GAN models
+Image to image translation RadioGAN[43],pix2pix[70],pix2pixHD[170]
+Image data generation and augmentation SGAN[149], DCGAN[134], ProGAN[78 ],
+ExoGAN[200]
+Image denoising Spectra-GAN[177]
+4.6 Remote Sensing
+Using GANs for remote sensing applications can be broadly divided into the following main categories:
+• Data generation or augmentation: Lin et al.[ 105] proposed multiple-layer feature-matching generative adver-
+sarial networks (MARTA GANs) for remote sensing data augmentation. MARTA GAN is based on DCGAN[134]
+however while DCGAN could produce images with a 64 × 64 resolution, MARTA GAN can produce 256×256
+remote sensing images. To generate high-quality samples of remote images perceptual loss and feature-matching
+loss were used for model training. Mohandoss et al.[ 120] presented the MSG-ProGAN framework that uses ten
+bands of Sentinel-2 satellite imagery with varying resolutions to generate realistic multispectral imagery for data
+augmentation. To help with training stability the authors based their model on the MSGGAN[77 ], ProGAN[78 ]
+models and used WGAN-GP[52 ] loss function. Thus, MSG-ProGAN can generate multispectral 256 × 256 satellite
+images instead of RGB images.
+• Super Resolution: HRPGAN[151] uses a PatchGAN inspired architecture to convert low resolution remote
+sensing images to high resolution images. The authors did not use batch normalization to preserve textures
+and sharp edges of ground objects in remote sensing images. Also, ReLU activations were replaced with SELU
+activations for overall lower training loss and stable training. In addition, the authors used a new loss function
+consisting of the traditional adversarial loss, perceptual reconstruction loss and regularization loss to train
+their model. D-SRGAN[28 ] converts low resolution Digital Elevation Models (DEMs) to high-resolution DEMs.
+D-SRGAN is based on the SRGAN[ 93 ] model. For training, D-SRGAN uses the combination of adversarial loss
+and content loss.
+• Pan-Sharpening: Liu et al.[ 107] proposed PSGAN for solving the task of image pan-sharpening and carried out
+several experiments using different image datasets and different Generator architectures. PSGAN is superior
+to many popular pan-sharpening approaches in terms of generating high-quality pan-sharpened images with
+fine spatial details and high-fidelity spectral information under both low-scale and full-scale image settings,
+Manuscript submitted to ACM
+26 Ankan Dash, Junyi Ye, and Guiling Wang
+according to their experiments. Furthermore, the authors discovered that two-stream architecture is usually
+preferable to stacking and that the batch normalisation layer and the self-attention module are undesirable in
+pan-sharpening. Pan-GAN[ 109] uses one Generator and two Discriminators for performing pan sharpening.
+The Generator is based on the PNN[ 33 ] architecture but the image scale in the Generator remains the same
+in different layers. The spectral and spatial Discriminators are similar in structure but have different inputs.
+The generated HRMS image or the interpolated LRMS image is fed into the spectral Discriminator. The original
+panchromatic image or the single channel image generated by the generated HRMS image after average pooling
+along the channel dimension are the inputs for the spatial Discriminator.
+• Haze removal and Restoration: Edge-sharpening cycle-consistent adversarial network (ES-CCGAN)[ 64 ] is a
+GAN-based unsupervised remote sensing image dehazing method based on the CycleGAN[197]. The authors
+used the unpaired image-to-image translation techniques for performing image dehazing. ES-CCGAN includes
+two generator networks and two discriminant networks. The Generators use DenseNet[67 ] blocks instead
+of the ResNet[59 ] block to generate dehazed remote-sensing images with plenty of texture information. An
+edge-sharpening loss was designed to restore clear edges in the images in addition to the adversarial loss,
+cycle-consistency loss and cyclic perceptual-consistency loss. Furthermore, to preserve contour information, a
+VGG16[146] network was re-trained using remote-sensing image data to evaluate the perceptual loss. To tackle
+the problem of lack of availability of pairs of clear images and corresponding haze images to train the model, Sun
+et al.[152] proposed a cascade method combining two GANs. A learning-to-haze GAN(UGAN) learns to haze
+remote sensing images using unpaired clear and haze image sets. The UGAN then guides the learning-to-dehaze
+GAN (PAGAN) to learn how to dehaze UGAN hazed images. Wang et al.[ 169] developed the Image Despeckling
+Generative Adversarial Network (ID-GAN) to restore speckled Synthetic Aperture Radar (SAR) images. Their
+proposed method uses an encoder-decoder type architecture for the Generator which performs image despeckling
+by taking a noisy image as input. The Discriminator follows a standard layout with a sequence of convolution,
+batch normalization and ReLU layers, sigmoid function to distinguish between real and synthetic images. The
+authors used a refined loss function which is made up of pixel-to-pixel Euclidean loss, perceptual loss, and
+adversarial loss, all combined with appropriate weights.
+• Cloud Removal: Several authors have used GANs for the removal of clouds contamination from remote sensing
+images([147],[ 97],[ 128],[ 175]). CLOUD-GAN[ 147] can translate cloudy images into cloud-free visible range
+images. CLOUD-GAN functions similar to CycleGAN[ 197] having two Generators and two Discriminators. The
+authors use the LSGAN[ 111 ] training method as it has been shown to generate higher quality images with a much
+more stable learning process compared to regular GANs. For thin cloud removal in multi-spectral images, Li et
+al.[97] proposed a novel semi-supervised method called CR-GAN-PM, which combines Generative Adversarial
+Networks and a physical model of cloud distortion. There are three networks in the CR-GAN-PM: an extraction
+network, a removal network, and a discriminative network. The GAN architecture is made up of the removal and
+discriminative networks. A combination of adversarial loss, reconstruction loss, correlation loss and optimization
+loss was used for training CR-GAN-PM.
+4.7 Material Science
+GANs have a wide range of applications in material science. GANs can be used to handle a variety of material science
+challenges such as Micro and crystal structure generation and design, Designing of complex architectured materials,
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 27
+Table 8. Applications in Remote Sensing
+Applications in Remote Sensing GAN models
+Data generation or augmentation MARTA GAN[105],MSG-ProGAN[120]
+Super Resolution HRPGAN[151],D-SRGAN[28]
+Pan-Sharpening PSGAN[107],PAN-GAN[109]
+Haze removal and Restoration ES-CCGAN[64],ID-GAN[169], Sun et al.[152]
+Cloud removal CLOUD-GAN[147],CR-GAN-PM[97]
+Inorganic materials design, Virtual microstructure design and Topological design of metaporous materials for sound
+absorption.
+Singh et al.[148] developed physics aware GAN model for the synthesis of binary microstructure images. The authors
+used three models to accomplish the task. The first model is the WGAN-GP[52 ]. The second approach replaces the usual
+Discriminator in a GAN with an invariance checker, which explicitly enforces known physical invariances. The third
+model combines the first two to recreate microstructures that adhere to both explicit physics invariances and implicit
+restrictions derived from image data. Yang et al.[181] proposed a GAN-based framework for microstructural materials
+design. A Bayesian optimization framework is used to obtain the microstructure with desired material property by
+processing the GAN generated latent variables. CrystalGAN[123] is a novel GAN-based framework for generating
+chemically stable crystallographic structures with enhanced domain complexity. The CrystalGAN model consists of
+three main components, a First step GAN, a Feature transfer procedure and the Second step GAN synthesizes. The
+First step GAN resembles the cross-domain GAN and generates pseudo-binary samples where the domains are mixed.
+The Feature transfer technique brings greater order complexity to the data generated from the samples obtained in
+the preceding stage. Finally, the second step GAN synthesizes ternary stable chemical compounds while adhering
+to geometric limitations. Kim et al.[85] proposed leveraging a coordinate-based crystal representation inspired by
+point clouds to generate crystal structures using generative adversarial network. Their Composition-Conditioned
+Crystal GAN can generate materials with the desired chemical composition by conditioning the network with a one-hot
+encoded composition vector. Designing complex architectured materials is challenging and is heavily influenced by the
+experienced designers’ prior knowledge. To tackle this issue, Mao et al.[ 112] successfully used GANs for the design
+of complex architectured materials. Millions of randomly generated architectured materials classified into different
+crystallographic symmetries were used to train their model. Their proposed model generates complex architectured
+designs that require no prior knowledge and can be readily applied in a wide range of applications.
+Dan et al. proposed MatGAN[ 27] is the first GAN model for efficient sampling of inorganic materials design space by
+generating hypothetical inorganic materials. MatGAN, based on WGAN[ 7] can learn implicit chemical compositional
+rules from existing materials, allowing them to generate hypothetical yet chemically sound molecules. Another similar
+work was carried out by Hu et al.[65] where they used WGAN[ 7 ] to generate hypothetical inorganic materials consistent
+with the atomic combination of the training materials.
+Lee et al.[ 94 ] employed DCGAN[ 134], CycleGAN[197] and Pix2Pix[ 70] to generate realistic virtual microstructural
+graph images. KL-divergence, a similarity metric that is considerably below 0.1, confirmed the similarity between the
+GAN-generated and ground truth images.
+GANs were used by Zhang et al.[ 188] to greatly accelerate and improve the topological design of metaporous
+materials for sound absorption. Finite Element Method (FEM) simulation image data were used to train the model. The
+Manuscript submitted to ACM
+28 Ankan Dash, Junyi Ye, and Guiling Wang
+quality of the GAN generated designs was confirmed by FEM simulation and experimental evaluation, demonstrating
+that GANs are capable of generating metaporous material designs with satisfactory broadband absorption performance.
+Table 9. Applications in Material Science
+Applications in Material Science GAN models
+Micro and crystal structure generation and design Hybrid (WGAN-GP[52 ]+GIN) [ 148], GAN+GP-
+Hedge Bayesian optimization framework[181],
+CrystalGAN[ 123], Composition-Conditioned Crystal
+GAN[85]
+Designing complex architectured materials GAN-based model[112]
+Inorganic materials design MatGAN[27], WGAN[7] based model[65]
+Virtual microstructure design (DCGAN[134], CycleGAN[197] and Pix2Pix[70])[94]
+Topological design of metaporous materials for sound ab-
+sorption
+GAN based model[188]
+4.8 Finance
+Financial data modeling is a challenging problem as there are complex statistical properties and dynamic stochastic
+factors behind the process. Many financial data are time-series data, such as real property price and stock market
+index. Many of them are very expensive to available and usually do not have enough labeled historical data, which
+greatly limits the performance of deep neural networks. In addition, unlike the static features, such as gender and
+image data, time-series data has a high temporal correlation across time. This becomes more complicated when we
+model multivariate time series where we need to consider the potentially complex dynamics of these variables across
+time. Recently, with the development and wide usage of GAN in image and audio tasks, a lot of research works have
+proposed to generate realistic time-series synthetic data in finance.
+Efimov et al.[36] combine conditional GAN (CGAN) and Deep Regret Analytic Generate Adversarial Networks
+(DRAGANs) to replicate three American Express datasets with high fidelity. A regularization term is added in the
+Discriminator loss in DRAGANs to avoid gradient exploding or gradient vanishing effects as well as to stabilize the
+convergence. Zhou et al.[ 196] adopt the GAN-FD model (A GAN model for minimizing both forecast error loss and
+direction prediction loss) to predict stock prices. The Generator is based on LSTM layers while the Discriminator
+is using CNN layers. Li et al.[96 ] propose a conditional Wasserstin GAN (WGAN) named Stock-GAN to capture
+history dependency for stock market order streams. The proposed Generator network has two crafted features (1)
+approximating the double auction mechanism underlying stock exchanges and (2) including the order-book features as
+the condition information. Wiese et al.[176] introduce Quant GANs which use the Temporal Convolutional Networks
+(TCNs) architecture, also known as WaveNet[126] as the Generator. It shows the capability of capturing the long-range
+dependence such as the presence of volatility clusters in stock data such as S&P 500 index. FIN-GAN[ 155] captures the
+temporal structures of financial time-series so as to generate the major stylized facts of price returns, including the linear
+unpredictability, the fat-tailed distribution, volatility clustering, the leverage effects, the coarse-fine volatility correlation,
+and the gain/loss asymmetry. Leangarun et al.[92 ] build LSTM-GANs to detect the abnormal trading behaviors caused
+by stock price manipulations. The base architecture for both Generator and Discriminator is LSTM. The simulated
+manipulation cases are used for testing purposes. The detection system was tested with the trading data from the Stock
+Exchange of Thailand (SET) which achieves 68.1% accuracy in detecting pump-and-dump manipulations in unseen
+market data.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 29
+Table 10. Applications in Finance
+Applications in Finance GAN models
+Financial Data Generation CGAN and DRAGANs[ 36], FIN-GAN[ 155], Stock-
+GAN[96]
+Stock Market Prediction GAN-FD[196], Quant GANs [176]
+Anomaly Detection in Finance LSTM-GANs[92]
+4.9 Marketing
+GANs can be leveraged to help businesses create effective marketing tools by synthesizing novel and unique designs
+for logos and generate fake images of models.
+Typically designing a new logo is a fairly long and exhausting process and requires a lot of time and effort of
+the designer to meet the specific requirements of the clients. Sage et al.[139] put forward iWGAN, a GAN-based
+framework for virtually generating infinitely many variations of logos by specifying parameters such as shape, colour,
+and so on, in order to facilitate and expedite the logo design process. The authors proposed clustered GAN model to
+train on multi-modal data. Clustering was used to stabilise GAN training, prevent mode collapse and achieve higher
+quality samples on unlabeled datasets. The GAN models were based on the DCGAN[134] and WGAN-GP[52 ] models.
+LoGAN[117] or the Auxiliary Classifier Wasserstein Generative Adversarial Neural Network with gradient penalty
+(AC-WGAN-GP) is based on the ACGAN[ 124] architecture. LoGAN can be used to generate logos conditioned on
+twelve predetermined colors. LoGAN consists of a Generator, a Discriminator and a classification network to help the
+Discriminator in classifying the logos. The authors use the WGAN-GP[52 ] loss function for better training stability
+instead of using the ACGAN loss.
+GANs can be used to replace real images of people for marketing-related ads, by generating synthetic images and
+videos thus alleviate problems related to privacy. Ma et al.[ 110] proposed Pose Guided Person Image Generation
+Network(PG2) to generate synthetic fake images of a person in arbitrary poses conditioned on an image of a person and
+a new pose. PG2 uses a two-stage process: Stage 1 Pose integration and Stage 2 Image refinement. Stage 1 generates
+a coarse output based on the input image and the target pose that depicts the human’s overall structure. Stage 2
+adopts the DCGAN[ 134] model and refine the initial result through adversarial training, resulting in sharper images.
+Deformable GANs[145] generate person images based on their appearance and pose. The authors introduced deformable
+skip connections and nearest neighbor loss to address large spatial deformation and to fix misalignment between the
+generated and ground-truth images. Song et al.[ 150] proposed E2E which uses GANs for unsupervised pose-guided
+person image generation. The authors break down the difficult task of learning a direct mapping under various poses
+into semantic parsing transformation and appearance generation to deal with its complexity.
+Table 11. Applications in Marketing
+Applications in Marketing GAN models
+Logo generation iWGAN[139],LoGAN[117]
+Model generation and pose generation PG2[110], Deformable GANs[145], E2E[150]
+Manuscript submitted to ACM
+30 Ankan Dash, Junyi Ye, and Guiling Wang
+4.10 Fashion Designing
+Fashion design is not the first thing that comes to mind when we think of GANs, however developing designs for
+clothes and outfits is another area where GANs have been utilized ([81],[106],[186]).
+Based on the cGAN[118], Attribute-GAN[ 106] learns a mapping from a pair of outfits based on clothing attributes.
+The model has one Generator and two Discriminators. The Generator uses a U-Net architecture. A PatchGAN[ 69]
+Discriminator is used to capture local high-frequency structural information and a multi-task attribute classifier
+Discriminator is used to determine whether the generated fake apparel image has the expected ground truth attributes.
+Yuan et al.[186] presented Design-AttGAN, a new version of attribute GAN (AttGAN)[ 60 ] to edit garment images
+automatically based on certain user-defined attributes. The AttGAN’s original formulation is changed to avoid the
+inherent conflict between the attribute classification loss and the reconstruction loss.
+Table 12. Applications in Fashion Design
+Applications in Fashion Design GAN models
+Clothes and garment design P-GANs[ 81 ],Attribute-GAN[106],Design-
+AttGAN[186]
+4.11 Sports
+GANs can be used to generate sports texts, augment sports data, and predict and simulate sports activity to overcome
+the lack of labeled data and get insights into player behaviour patterns.
+Li et al.[ 95 ] used WGAN-GP[ 52 ] for automatic generation of sport news based on game stats. Their WGAN model
+takes scores as input and outputs sentences describing how one team defeated another. This paper also showed the
+potential applications of GANs in the NLP area.
+JointsGAN[98 ] was proposed by Li et al. to augment soccer videos with a dribbling actions dataset for improving
+the accuracy of the dribbling styles classification model. The authors use Mask R-CNN[ 57 ] and OpenPose[ 15 ] to
+build dribbling player’s joint model to act as a condition and guide the GAN model. The accuracy of classification is
+improved from 88.14% percent to 89.83% percent using the dribbling player’s joints model as the condition to the GAN.
+Theagarajan et al.[157] used GANs to augment their dataset to build robust deep learning classification, object detection
+and localization models for soccer-related tasks. Specifically, they proposed the Triplet CNN-DCGAN framework to add
+more variability to the training set in order to improve the generalisation capacity of the aforementioned models. The
+GAN-based model is made of a regularizer CNN (i.e., Triplet CNN) along with DCGAN[ 134] and uses the DCGAN loss
+and the binary cross-entropy loss of the Triplet CNN.
+Memory augmented Semi-Supervised Generative Adversarial Network (MSS-GAN)[ 39] can be used to predict the
+shot type and location in tennis. MSS-GAN is inspired by SS-GAN[ 30 ], coupled with memory modules to enhance its
+capabilities. The Perception Network (PN) is used to convert input images into embeddings, which are then combined
+with embeddings from the Episodic Memory (EM) and Semantic Memory (SM) to predict the next shot via the Response
+Generation Network (RGN). Finally, a GAN framework is used to train the network, with the RGN’s predicted shot being
+passed to the Discriminator, which determines whether or not it is a realistic shot. BasketballGAN[ 63 ] is a cGAN[118]
+and WGAN[7] based framework to generate basketball set plays based on an input condition(offensive tactic sketched
+by coaches) and a random noise vector. The network was trained by minimizing the adversarial loss (Wasserstein
+loss[7]) dribbler loss, defender loss, ball passing loss, and acceleration loss.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 31
+Table 13. Applications in Sports
+Applications in Sports GAN models
+Sports text generation(NLP task) WGAN-GP[52] based GAN[95]
+Sports data augmentation JointsGAN[98], Triplet CNN-DCGAN[157]
+Sports action prediction and simulation MSS-GAN[39], BasketballGAN[63]
+4.12 Music
+Because human perception is sensitive to both global structure and fine-scale waveform coherence, music or audio
+synthesis is an intrinsically tough deep learning problem. As a result, synthesising music requires the creation of
+coherent raw audio waveforms that preserve both global and local structures. GANs have been applied for tasks such
+as music genre fusion and music generation.
+FusionGAN[ 21] is a GAN based framework for unsupervised music genre fusion. The authors proposed the use of a
+multi-way GAN based model and utilized the Wasserstein distance measure as the objective function for stable training.
+MidiNet[180] is a CNN-GAN based model to generate music with multiple MIDI channels. The model uses conditioner
+CNN to model the temporal dependencies by using the previous bar to condition the generation of the present bar,
+providing a powerful alternative to RNNs. The model features a flexible design that allows it to generate many genres
+of music based on input and specifications. Dong et al.[ 34 ] proposed Multi-track Sequential Generative Adversarial
+Networks for Symbolic Music Generation and Accompaniment or MuseGAN. Based on GANs, MuseGAN can be used
+for symbolic multi-track music generation. Dong et al.[35 ] demonstrated a unique GAN-based model for producing
+binary-valued piano-rolls by employing binary neurons[ 133] as a refiner network in the Generator’s output layer.
+When compared to existing approaches, the generated outputs of their model with deterministic binary neurons have
+fewer excessively fragmented notes. GANSYNTH[ 37], based on GANs can generate high-fidelity and locally-coherent
+audio. The proposed model outperforms the state-of-the-art WaveNet[ 162] model in generating high fidelity audio
+while also being much faster in sample generation. GANs were employed by Tokui[158] to create realistic rhythm
+patterns in unknown styles, which do not belong to any of the well-known electronic dance music genres in training
+data. Their proposed Creative-GAN model, uses the Genre Ambiguity Loss to tackle the problem of originality. Li et
+al.[99 ] presented an inception model-based conditional generative adversarial network approach (INCO-GAN), which
+allows for the automatic synthesis of complete variable-length music. Their proposed model comprises of four distinct
+components: a conditional vector Generator (CVG), an inception model-based conditional GAN (INCO-GAN), a time
+distribution layer and an inception model[ 154]. Their analysis revealed that the proposed method’s music is remarkably
+comparable to that created by human composers, with a cosine similarity of up to 0.987 between the frequency vectors.
+Muhamed et al.[121] presented the Transformer-GANs model, which combines GANs with Transformers to generate
+long, high-quality coherent music sequences. A pretrained SpanBERT[75] is used as the Discriminator and Transformer-
+XL[ 26] as the Generator. To train on long sequences, the authors use the Gumbel-Softmax technique[89 ] to obtain a
+differentiable approximation of the sampling process and to keep memory needs reasonable, a variant of the Truncated
+Backpropagation Through Time (TBPTT) algorithm[153] was utilised for gradient propagation over long sequences.
+5 LIMITATIONS OF GANS AND FUTURE DIRECTION
+In this section, we’ll go through some of the issues that GANs encounter, notably those related to training stability. We
+also discuss some of the prospective research areas in which GAN productivity could be enhanced.
+Manuscript submitted to ACM
+32 Ankan Dash, Junyi Ye, and Guiling Wang
+Applications in Music GAN models
+Music genre fusion FusionGAN[21]
+Music generation MidiNet[ 180], MuseGAN[34 ], Binary Neurons based
+WGAN-GP[35 ], GANSYNTH[ 37 ], Creative-GAN[ 158],
+INCO-GAN[99], Transformer-GANs[121]
+Table 14. Applications in Music
+5.1 Limitations of GANs
+Generative adversarial networks (GANs) have gotten a lot of interest because of their capacity to use a lot of unlabeled
+data. While great progress has been achieved in alleviating some of the hurdles associated with developing and training
+novel GANs, there are still a few obstacles to overcome. We explain some of the most typical obstacles in training GANs,
+as well as some proposed strategies that attempt to mitigate such issues to some extent.
+(1) Mode Collapse: In most cases, we want the GAN to generate a wide range of outputs. For example, while
+creating photos of human faces we’d like the Generator to generate varied-looking faces with different features
+for every random input to Generator. Mode collapse happens when the Generator can produce only a single type
+of output or a small set of outputs. This may occur as a result of the Generator’s constant search for the one
+output that appears most convincing to the Discriminator in order to easily trick the Discriminator, and hence
+continues to generate that one type.
+Several approaches have been proposed to alleviate the problem of mode collapse. Arjovsky et al. [7] found that
+Jensen-Shannon divergence is not ideal for measuring the distance of the distribution of the disjoint parts. As a
+result, they proposed the use of Wasserstein distance to calculate the distance between the produced and real
+data distributions. Metz et al.[115] proposed Unrolled Generative Adversarial Networks, which limit the risk of
+the Generator being over-optimized for a certain Discriminator, resulting in less mode collapse and increased
+stability.
+(2) Non-convergence: Although GANs are capable of achieving Nash equilibrium[48 ], arriving at this equilibrium
+is not straightforward. The training procedure necessitates maintaining balance and synchronisation between
+the Generator and Discriminator networks for optimal performance. Furthermore, only in the case of a convex
+function can gradient descent guarantee Nash equilibrium.
+Adding noise to Discriminator inputs and penalising Discriminator weights ([ 6 ], [138]) are two techniques of
+regularisation that authors have sought to utilise to improve GAN convergence.
+(3) Vanishing Gradients: Generator training can fail owing to vanishing gradients if the Discriminator is too good.
+A very accurate Discriminator produces gradients around zero, providing little feedback to the Generator and
+slowing or stopping learning.
+Goodfellow et al.[48] proposed a tweak to minimax loss to prevent the vanishing gradients problem. Although
+this tweak to the loss alleviates the vanishing gradients problem, it does not totally fix the problem, resulting in
+more unstable and oscillating training. The Wasserstein loss[7 ] is another technique to avoid vanishing gradients
+because it is designed to prevent vanishing gradients even when the Discriminator is trained to optimality.
+Manuscript submitted to ACM
+GANs and its applications in a wide variety of disciplines - From Medical to Remote Sensing 33
+5.2 Future direction
+Even though GANs have some limits and training issues, we simply cannot overlook their enormous potential as
+generative models. The most important area for future research is to make advancements in theoretical aspects to
+address concerns like mode collapse, vanishing gradients, non-convergence, and model breakdown. Changing learning
+objectives, regularising objectives, training procedures, tweaking hyperparameters, and other techniques have been
+proposed to overcome the aforementioned problems, as outlined in section 5.1. In most cases, however, accomplishing
+these objectives entails a trade-off between desired output and training stability. As a result, rather than addressing one
+training issue at a time, future research in this field should use a holistic approach in order to achieve a breakthrough in
+theory to overcome the challenges mentioned above.
+Besides overcoming the above theoretical aspects during model training, Saxena et al.[143] highlight some promising
+future research directions. (1) Keep high image quality without losing diversity. (2) Provide more theoretical analysis to
+better understand the tractable formulations during training and make training more stable and straightforward. (3)
+Improve the algorithm to make training efficient (4) Combine other techniques, such as online learning, game theory,
+etc with GAN.
+6 CONCLUSION
+In this paper, we presented state-of-the-art GAN models and their applications in a wide variety of domains. GANs’
+popularity stems from their ability to learn extremely nonlinear correlations between latent space and data space. As a
+result, the large amounts of unlabeled data that remain closed to supervised learning can be used. We discuss numerous
+aspects of GANs in this article, including theory, applications, and open research topics. We believe that this study will
+assist academic and industry researchers from various disciplines in gaining a full grasp of GANs and their possible
+applications. As a result, they will be able to analyse the potential application of GANs for their specific tasks.
+REFERENC
